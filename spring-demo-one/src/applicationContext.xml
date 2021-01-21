@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Define your beans here -->
+	<bean id="myLoggerConfig"
+		class="com.vaha1st.springdemo.MyLoggerConfig" init-method="initLogger">
+		<property name="rootLoggerLevel" value="FINE" />
+		<property name="printedLoggerLevel" value="FINE" />
+	</bean>
+
+	<!-- define a file location -->
+	<context:property-placeholder
+		location="classpath:sport.properties" />
+		
+	<!-- define the dependencies -->
+
+	<bean id="myFortune"
+		class="com.vaha1st.springdemo.RandomFortuneService">
+	</bean>
+
+	<bean id="myCoach" class="com.vaha1st.springdemo.TrackCoach">
+
+		<!-- set up the constructor injection -->
+		<constructor-arg ref="myFortune" />
+
+	</bean>
+
+	<bean id="MyCricketCoach"
+		class="com.vaha1st.springdemo.CricketCoach"
+		init-method="doCricketInit"
+		destroy-method="doCricketDestroy">
+
+		<!-- Set up our setter injection -->
+		<property name="fortuneService" ref="myFortune" />
+
+		<!-- Inject literal values -->
+		<property name="email" value="${rus.email}" />
+		<property name="team" value="${rus1.team}" />
+
+	</bean>
+
+</beans>
+
+
+
+
+
